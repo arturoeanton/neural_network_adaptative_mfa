@@ -2,33 +2,30 @@
 
 ```
 go run main.go
-
 Successfully Opened data.json
 Load data ok
 Standardize ok
-4977
-5023
-Epochs Elapsed Loss (CE)
-
----
-
-1000 30.726428913s 0.1810  
-2000 1m1.452032777s 0.1984  
-3000 1m36.882368638s 0.2280  
-4000 2m8.804377079s 0.1655  
-5000 2m41.951077041s 0.1569  
-6000 3m14.411064422s 0.1413  
-7000 3m46.968400719s 0.1843  
-8000 4m20.491644488s 0.1729  
-9000 4m52.892439185s 0.1993  
-10000 5m24.217780214s 0.1855  
+4987
+5013
+Epochs          Elapsed         Loss (CE)
+---             ---             ---
+1000            20.62497998s    0.1660
+2000            41.331965651s   0.1616
+3000            1m2.160707063s   0.1940
+4000            1m22.877344167s   0.1885
+5000            1m43.544626945s   0.1677
+6000            2m4.246957042s   0.1756
+7000            2m25.042592578s   0.1484
+8000            2m45.7141902s   0.1819
+9000            3m6.345217601s   0.1547
+10000           3m26.986690337s   0.1842
 Data: data.json
 Successfully Opened data.json
-eP: 0.1294 - eN: 1294 - e0: 1294 - e1: 0 - len data: 10000
+eP: 0.1295  - eN: 1295  - e0: 1295  - e1: 0  - len data: 10000
 Data: data1.json
 Successfully Opened data1.json
-eP: 0.134 - eN: 1340 - e0: 1336 - e1: 4 - len data: 10000
+eP: 0.1338  - eN: 1338  - e0: 1336  - e1: 2  - len data: 10000
 Data: data2.json
 Successfully Opened data2.json
-eP: 0.1291 - eN: 1291 - e0: 1289 - e1: 2 - len data: 10000
+eP: 0.1289  - eN: 1289  - e0: 1289  - e1: 0  - len data: 10000
 ```

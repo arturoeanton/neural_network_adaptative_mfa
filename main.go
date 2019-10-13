@@ -46,7 +46,7 @@ func main() {
 		/* Input dimensionality */
 		Inputs: len(data[0].Input),
 		/* Two hidden layers consisting of two neurons each, and a single output */
-		Layout: []int{16, 8, 4, 4, 2, 1},
+		Layout: []int{8, 8, 6, 6, 4, 4, 3, 1},
 		/* Activation functions: Sigmoid, Tanh, ReLU, Linear */
 		Activation: deep.ActivationSigmoid,
 		/* Determines output layer activation & loss function:
@@ -58,22 +58,29 @@ func main() {
 		/* Weight initializers: {deep.NewNormal(μ, σ), deep.NewUniform(μ, σ)} */
 		Weight: deep.NewNormal(1.0, 0.0),
 		/* Apply bias */
-		Bias: true,
+		Bias: false,
 	})
 
 	// params: learning rate, momentum, alpha decay, nesterov
-	//optimizer := training.NewSGD(0.5, 0.1, 0.1, true)
+
+	//optimizer := training.NewSGD(0.8, 0.1, 0.001, true)
 	//optimizer := training.NewAdam(0.001, 0.9, 0.999, 1e-8)
 	//optimizer := training.NewAdam(0.7, 0.9, 0.999, 1e-8)
 
-	optimizer := training.NewSGD(0.05, 0.1, 1e-6, true)
+	//optimizer := training.NewSGD(0.07, 0.1, 1e-6, true)
 
 	// params: optimizer, verbosity (print stats at every 50th iteration)
-	trainer := training.NewTrainer(optimizer, 1000)
-	training, heldout := data.Split(0.5)
-	fmt.Println(len(training))
-	fmt.Println(len(heldout))
-	trainer.Train(neural, training, heldout, 10000)
+
+	//optimizer := training.NewAdam(0.001, 0.9, 0.999, 1e-8)
+	optimizer := training.NewSGD(0.1, 0.0, 0.0, false)
+	// params: optimizer, verbosity (print info at every n:th iteration), batch-size, number of workers
+	// trainer := training.NewBatchTrainer(optimizer, 1, 200, 50)
+	trainer := training.NewTrainer(optimizer, 1)
+
+	training, heldout := data.Split(0.75)
+	fmt.Println("len training:", len(training))
+	fmt.Println("len heldout:", len(heldout))
+	trainer.Train(neural, training, heldout, 100)
 
 	fmt.Println("Data: data.json")
 	printError("data")
