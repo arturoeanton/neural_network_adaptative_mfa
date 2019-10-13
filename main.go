@@ -186,7 +186,7 @@ func getData(name string) training.Examples {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println("Successfully Opened data.json")
+	fmt.Println("Successfully Opened " + name + ".json")
 	defer jsonFile.Close()
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
