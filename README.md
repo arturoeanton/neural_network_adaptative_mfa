@@ -1,7 +1,8 @@
 # neural_network_adaptative_mfa
 
-`
+```
 go run main.go
+
 Successfully Opened data.json
 Load data ok
 Standardize ok
@@ -30,4 +31,4 @@ eP: 0.134 - eN: 1340 - e0: 1336 - e1: 4 - len data: 10000
 Data: data2.json
 Successfully Opened data2.json
 eP: 0.1291 - eN: 1291 - e0: 1289 - e1: 2 - len data: 10000
-`
+```
