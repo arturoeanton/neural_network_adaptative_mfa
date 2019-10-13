@@ -46,7 +46,7 @@ func main() {
 		/* Input dimensionality */
 		Inputs: len(data[0].Input),
 		/* Two hidden layers consisting of two neurons each, and a single output */
-		Layout: []int{8, 8, 6, 6, 4, 4, 3, 1},
+		Layout: []int{8, 8, 6, 6, 4, 3, 1},
 		/* Activation functions: Sigmoid, Tanh, ReLU, Linear */
 		Activation: deep.ActivationSigmoid,
 		/* Determines output layer activation & loss function:
@@ -72,15 +72,15 @@ func main() {
 	// params: optimizer, verbosity (print stats at every 50th iteration)
 
 	//optimizer := training.NewAdam(0.001, 0.9, 0.999, 1e-8)
-	optimizer := training.NewSGD(0.1, 0.0, 0.0, false)
+	optimizer := training.NewSGD(0.07, 0.0, 0.0, false)
 	// params: optimizer, verbosity (print info at every n:th iteration), batch-size, number of workers
 	// trainer := training.NewBatchTrainer(optimizer, 1, 200, 50)
-	trainer := training.NewTrainer(optimizer, 10)
+	trainer := training.NewTrainer(optimizer, 100)
 
 	training, heldout := data.Split(0.75)
 	fmt.Println("len training:", len(training))
 	fmt.Println("len heldout:", len(heldout))
-	trainer.Train(neural, training, heldout, 100)
+	trainer.Train(neural, training, heldout, 2000)
 
 	fmt.Println("Data: data.json")
 	printError("data")
