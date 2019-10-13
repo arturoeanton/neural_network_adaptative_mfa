@@ -75,7 +75,7 @@ func main() {
 	optimizer := training.NewSGD(0.1, 0.0, 0.0, false)
 	// params: optimizer, verbosity (print info at every n:th iteration), batch-size, number of workers
 	// trainer := training.NewBatchTrainer(optimizer, 1, 200, 50)
-	trainer := training.NewTrainer(optimizer, 1)
+	trainer := training.NewTrainer(optimizer, 10)
 
 	training, heldout := data.Split(0.75)
 	fmt.Println("len training:", len(training))
