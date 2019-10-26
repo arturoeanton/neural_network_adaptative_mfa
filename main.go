@@ -46,7 +46,7 @@ func main() {
 		/* Input dimensionality */
 		Inputs: len(data[0].Input),
 		/* Two hidden layers consisting of two neurons each, and a single output */
-		Layout: []int{8, 8, 6, 6, 4, 3, 1},
+		Layout: []int{8, 8,  3, 1},
 		/* Activation functions: Sigmoid, Tanh, ReLU, Linear */
 		Activation: deep.ActivationSigmoid,
 		/* Determines output layer activation & loss function:
@@ -54,7 +54,7 @@ func main() {
 		ModeMultiClass: softmax output with Cross Entropy loss
 		ModeMultiLabel: sigmoid output with Cross Entropy loss
 		ModeBinary: sigmoid output with binary CE loss */
-		Mode: deep.ModeMultiLabel,
+		Mode: deep.ModeRegression,
 		/* Weight initializers: {deep.NewNormal(μ, σ), deep.NewUniform(μ, σ)} */
 		Weight: deep.NewNormal(1.0, 0.0),
 		/* Apply bias */
