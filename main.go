@@ -4,16 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"math"
 	"math/rand"
-	"net/http"
 	"os"
-	"strconv"
-	"strings"
 	"time"
 
-	"github.com/gorilla/mux"
+	"github.com/jedib0t/go-pretty/table"
 	deep "github.com/patrikeh/go-deep"
 	training "github.com/patrikeh/go-deep/training"
 )
@@ -25,7 +21,6 @@ var (
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
-	base = "http://127.0.0.1:9090"
 	/*
 		Input esta definido por
 		Distancia de la ultima ip en km
@@ -88,44 +83,11 @@ func main() {
 	printError("data1")
 	fmt.Println("Data: data2.json")
 	printError("data2")
-
-	r := mux.NewRouter()
-	r.HandleFunc("/predict", predict)
-	r.HandleFunc("/data/{name}", show)
-
-	http.Handle("/", r)
-	log.Fatal(http.ListenAndServe(":9090", nil))
-
 }
 
-func show(w http.ResponseWriter, r *http.Request) {
-	name := mux.Vars(r)["name"]
-	data := getData(name)
-	w.Header().Set("Content-Type", "application/json")
-	ret := []string{}
-	for _, e := range data {
-		ret = append(ret, base+"/predict?input="+strings.Trim(strings.Join(strings.Fields(fmt.Sprint(e.Input)), ","), "[]"))
-	}
 
-	json.NewEncoder(w).Encode(ret)
-}
 
-func predict(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	var err error
-	inputstr := strings.Split(r.URL.Query().Get("input"), ",")
-	input := []float64{0, 0, 0, 0}
-	for i, e := range inputstr {
-		input[i], err = strconv.ParseFloat(e, 64)
-		if err != nil {
-			json.NewEncoder(w).Encode(err)
-			return
-		}
-	}
-	fmt.Println(input)
-	deep.Standardize(input)
-	json.NewEncoder(w).Encode(neural.Predict(input))
-}
+
 
 func generateData(name string) {
 	var data training.Examples
@@ -207,11 +169,26 @@ func printError(name string) {
 	errorN := 0
 	error0 := 0
 	error1 := 0
+
+
+	t := table.NewWriter()
+	t.SetOutputMirror(os.Stdout)
+	t.AppendHeader(table.Row{"KM", "Time", "RISK1", "RISK2", "Expected", "Result"})
+
+
 	for _, d := range data {
 		deep.Standardize(d.Input)
+		km := fmt.Sprintf("%3f", d.Input[0])
+		tt := fmt.Sprintf("%3f", d.Input[1])
+		r1 := fmt.Sprintf("%3f", d.Input[2])
+		r2 := fmt.Sprintf("%3f", d.Input[3])
+		errI := d.Response[0] - neural.Predict(d.Input)[0]
+		row := table.Row{km,tt,r1,r2,d.Response[0] ,neural.Predict(d.Input)[0], errI}
+
+
 		if math.Round(neural.Predict(d.Input)[0]) != d.Response[0] {
-			//fmt.Println(d.Input, "\t\t->", math.Round(neural.Predict(d.Input)[0]), " real is ", d.Response[0])
 			errorN++
+			row = table.Row{km,tt,r1,r2,d.Response[0] ,neural.Predict(d.Input)[0], errI, "Error"}
 			if math.Round(neural.Predict(d.Input)[0]) == 1 {
 				error1++
 			}
@@ -219,7 +196,13 @@ func printError(name string) {
 				error0++
 			}
 		}
+
+		t.AppendRow(row)
+
 	}
+
+	t.AppendFooter(table.Row{"", "","","","", "", "Total", errorN})
+	t.Render()
 	errorPorc := float64(errorN) / float64(len(data))
 	fmt.Println("eP:", errorPorc, " - eN:", errorN, " - e0:", error0, " - e1:", error1, " - len data:", len(data))
 
