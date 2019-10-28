@@ -177,14 +177,16 @@ func printError(name string) {
 
 
 	for _, d := range data {
-		deep.Standardize(d.Input)
-		km := fmt.Sprintf("%3f", d.Input[0])
-		tt := fmt.Sprintf("%3f", d.Input[1])
-		r1 := fmt.Sprintf("%3f", d.Input[2])
-		r2 := fmt.Sprintf("%3f", d.Input[3])
-		errI := d.Response[0] - neural.Predict(d.Input)[0]
-		row := table.Row{km,tt,r1,r2,d.Response[0] ,neural.Predict(d.Input)[0], errI}
 
+		km := fmt.Sprintf("%.3f", d.Input[0])
+		tt := fmt.Sprintf("%.3f", d.Input[1])
+		r1 := fmt.Sprintf("%.3f", d.Input[2])
+		r2 := fmt.Sprintf("%.3f", d.Input[3])
+
+		deep.Standardize(d.Input)
+		errI := fmt.Sprintf("%.3f",d.Response[0] - neural.Predict(d.Input)[0])
+		out := fmt.Sprintf("%.3f",neural.Predict(d.Input)[0])
+		row := table.Row{km,tt,r1,r2,d.Response[0] ,out, errI}
 
 		if math.Round(neural.Predict(d.Input)[0]) != d.Response[0] {
 			errorN++
